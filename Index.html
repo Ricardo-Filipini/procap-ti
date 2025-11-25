@@ -1,1 +1,361 @@
 
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guia de Lotação do Novo Servidor - BCB</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Chosen Palette: Warm Neutrals (Page: bg-gray-50, Cards: bg-white) with BCB-inspired accents (text-blue-900, tags-blue-100/800) -->
+    <!-- Application Structure Plan: A single-page, card-based dashboard. The user goal is *comparison* for choosing a department. The designed structure is a responsive grid of "department cards," which is more usable than tabs or a linear page. The key interaction is a live search/filter bar, allowing users to find departments based on keywords (e.g., 'Python', 'PIX', 'Jurídico'), which directly supports the user's goal of matching their skills/interests. -->
+    <!-- Visualization & Content Choices: Source info is qualitative (text slides). Goal: Synthesize/Compare. Presentation: Text content is organized into logical sections on each card (What, Day-to-day, Keywords). Interaction: Live search bar filters the cards. Justification: Search is intuitive for exploration. Chart.js (Mandatory): To fulfill the requirement with qualitative data, I've created synthetic "Profile Radar Charts" for each department. This visualizes a department's focus (e.g., 'Analítico', 'Tecnológico') and provides an "at-a-glance" comparison, directly supporting the app's purpose. Library: Chart.js (Radar). -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 400px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 260px;
+            max-height: 260px;
+        }
+        .department-card {
+            transition: all 0.3s ease-in-out;
+        }
+        .department-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        h1, h2, h3, h4, h5, h6 {
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body class="text-gray-800">
+
+    <header class="bg-white shadow-sm">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-6">
+            <h1 class="text-3xl font-bold text-blue-900 text-center">Guia de Lotação do Novo Servidor</h1>
+            <p class="text-lg text-gray-700 text-center mt-2 max-w-3xl mx-auto">
+                Bem-vindo ao Banco Central! Este guia interativo ajuda você a explorar o dia a dia, ferramentas e operações de alguns departamentos.
+            </p>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 sm:px-6 lg:px-8 py-10">
+
+        <section id="search-section" class="mb-10">
+            <p class="text-center text-gray-700 mb-4">
+                Use a barra abaixo para filtrar os departamentos por palavra-chave (ex: "PIX", "Python", "normas", "risco", "DevOps").
+            </p>
+            <div class="max-w-xl mx-auto">
+                <input type="text" id="search-bar"
+                       placeholder="Pesquisar por ferramenta, operação ou perfil..."
+                       class="w-full p-4 border border-gray-300 rounded-lg shadow-sm text-lg
+                              focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent">
+            </div>
+        </section>
+
+        <section id="departments-section">
+            <h2 class="text-2xl font-semibold text-blue-900 mb-6">Departamentos</h2>
+            <div id="department-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            </div>
+            <div id="no-results" class="hidden text-center text-gray-600 text-xl py-12">
+                <p>Nenhum departamento encontrado com esse termo de pesquisa.</p>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="text-center py-6 mt-12 border-t border-gray-200">
+        <p class="text-sm text-gray-500">Criado para auxiliar os novos servidores do BCB. As informações são baseadas nos slides fornecidos.</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            const chartLabels = ['Analítico', 'Operacional', 'Regulatório', 'Pesquisa', 'Tecnológico'];
+
+            const departmentsData = [
+                {
+                    id: 'denor',
+                    acronym: 'DENOR',
+                    name: 'Dep. de Regulação Prudencial e Cambial',
+                    profile: 'Regulatório / Analítico',
+                    what: 'Responsável por propor, elaborar e interpretar as normas do SFN, especialmente as prudenciais (como Basileia) e as de câmbio, além de coordenar comitês regulatórios.',
+                    dayToDay: [
+                        'Análise de arcabouços regulatórios (ex: Basileia).',
+                        'Elaboração e redação de minutas de normas (resoluções, circulares).',
+                        'Emissão de pareceres técnicos e jurídicos sobre normas.',
+                        'Participação em fóruns e comitês de regulação.',
+                        'Desenvolvimento de estudos para subsidiar novas regulações.'
+                    ],
+                    keywords: 'Basileia, Normas, Regulação, Câmbio, Jurídico, Resolução, Circular, Estudos, Parecer',
+                    chartData: [4, 1, 5, 2, 1]
+                },
+                {
+                    id: 'deban',
+                    acronym: 'DEBAN',
+                    name: 'Dep. de Operações Bancárias e de Sistema de Pagamentos',
+                    profile: 'Operacional / Tecnológico',
+                    what: 'Gerencia as operações críticas do sistema financeiro, incluindo o Sistema de Pagamentos (SPI/PIX), as Reservas (STR) e as operações do Tesouro Nacional e fundos do governo.',
+                    dayToDay: [
+                        'Monitoramento em tempo real do STR (PIX, TED, etc.).',
+                        'Execução de operações de liquidez (redesconto, depósitos).',
+                        'Operacionalização de leilões do Tesouro Nacional.',
+                        'Gestão e custódia de garantias do SFN.',
+                        'Operação dos sistemas de pagamento (SPI, Selic).'
+                    ],
+                    keywords: 'PIX, STR, SPI, Selic, Operação, Real-time, Liquidez, Leilão, Tesouro, Custódia, FGTS',
+                    chartData: [3, 5, 2, 1, 4]
+                },
+                {
+                    id: 'depec',
+                    acronym: 'DEPEC',
+                    name: 'Dep. de Estudos e Pesquisas',
+                    profile: 'Pesquisa / Acadêmico',
+                    what: 'A "área acadêmica" do BCB. Foca em pesquisa econômica pura e aplicada, modelagem macroeconômica e análise de conjuntura para subsidiar as decisões do Banco e publicações oficiais.',
+                    dayToDay: [
+                        'Desenvolvimento e manutenção de modelos macroeconômicos (DSGE, SAMBA).',
+                        'Análise de dados e projeções de inflação e atividade econômica.',
+                        'Redação de seções do Relatório de Inflação e Relatório de Estabilidade.',
+                        'Pesquisa para publicação em periódicos acadêmicos.',
+                        'Uso intensivo de ferramentas estatísticas e de programação.'
+                    ],
+                    keywords: 'R, Python, Matlab, E-views, Modelagem, DSGE, SAMBA, Pesquisa, Relatório de Inflação, Acadêmico, Econometria',
+                    chartData: [5, 1, 1, 5, 3]
+                },
+                {
+                    id: 'derad',
+                    acronym: 'DERAD',
+                    name: 'Dep. de Resolução e de Ação Sancionadora',
+                    profile: 'Jurídico / Resolução',
+                    what: 'Atua quando as coisas dão errado. Conduz regimes de resolução para instituições em crise (intervenção, liquidação) e aplica sanções através de Processos Administrativos (PAS).',
+                    dayToDay: [
+                        'Análise de planos de recuperação de bancos.',
+                        'Instauração e condução de regimes de resolução (ex: liquidação).',
+                        'Condução de Processos Administrativos Sancionadores (PAS).',
+                        'Negociação de acordos (ex: leniência, termo de compromisso).',
+                        'Análise jurídica e processual de infrações.'
+                    ],
+                    keywords: 'PAS, Processo, Sanção, Resolução, Jurídico, Acordo de Leniência, Intervenção, Liquidação, Plano de Recuperação',
+                    chartData: [4, 3, 5, 1, 1]
+                },
+                {
+                    id: 'desup',
+                    acronym: 'DESUP',
+                    name: 'Dep. de Supervisão de Cooperativas e de Inst. Não Bancárias',
+                    profile: 'Supervisão / Analítico',
+                    what: 'Fiscaliza e monitora um universo diverso de instituições, como cooperativas de crédito, consórcios, instituições de pagamento (IPs) e fintechs, garantindo sua solidez e conformidade.',
+                    dayToDay: [
+                        'Monitoramento (supervisão indireta) de dados financeiros e de risco.',
+                        'Realização de inspeções (supervisão direta) nas instituições.',
+                        'Análise de riscos (liquidez, crédito, operacional) das supervisionadas.',
+                        'Reuniões com gestores de cooperativas e IPs.',
+                        'Autorização de funcionamento de novas instituições.'
+                    ],
+                    keywords: 'Supervisão, Risco, Consórcio, Cooperativa, Instituição de Pagamento, IP, Fintech, Fiscalização, Monitoramento',
+                    chartData: [5, 2, 4, 1, 2]
+                },
+                {
+                    id: 'deati',
+                    acronym: 'DEATI',
+                    name: 'Dep. de Tecnologia da Informação',
+                    profile: 'Tecnológico',
+                    what: 'O coração tecnológico do Banco. Responsável por desenvolver e sustentar todas as soluções de TI, gerenciar a infraestrutura, nuvem, dados, IA e garantir a segurança cibernética.',
+                    dayToDay: [
+                        'Desenvolvimento de software (Java, Python, etc.) em squads ágeis.',
+                        'Administração de sistemas e infraestrutura (on-premise e nuvem).',
+                        'Monitoramento de segurança cibernética (CSIRT).',
+                        'Gerenciamento de projetos de TI e transformação digital.',
+                        'Gestão de dados (Big Data, BI) e projetos de Inteligência Artificial.'
+                    ],
+                    keywords: 'DevSecOps, Cloud, Nuvem, IA, Python, Java, Infraestrutura, Segurança, Dados, Transformação Digital, Agile, Scrum',
+                    chartData: [3, 4, 1, 2, 5]
+                }
+            ];
+
+            const grid = document.getElementById('department-grid');
+            const searchBar = document.getElementById('search-bar');
+            const noResults = document.getElementById('no-results');
+            const chartInstances = {};
+
+            function createRadarChart(canvasId, data) {
+                if (chartInstances[canvasId]) {
+                    chartInstances[canvasId].destroy();
+                }
+
+                const ctx = document.getElementById(canvasId);
+                if (!ctx) return;
+                
+                const chartData = {
+                    labels: chartLabels,
+                    datasets: [{
+                        label: 'Perfil do Departamento',
+                        data: data,
+                        fill: true,
+                        backgroundColor: 'rgba(30, 64, 175, 0.2)',
+                        borderColor: 'rgba(30, 64, 175, 1)',
+                        pointBackgroundColor: 'rgba(30, 64, 175, 1)',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: 'rgba(30, 64, 175, 1)'
+                    }]
+                };
+
+                const options = {
+                    maintainAspectRatio: false,
+                    responsive: true,
+                    scales: {
+                        r: {
+                            angleLines: {
+                                color: 'rgba(0, 0, 0, 0.1)'
+                            },
+                            grid: {
+                                color: 'rgba(0, 0, 0, 0.1)'
+                            },
+                            pointLabels: {
+                                font: {
+                                    size: 13,
+                                    weight: 500
+                                },
+                                color: '#374151'
+                            },
+                            ticks: {
+                                backdropColor: 'transparent',
+                                color: '#4b5563',
+                                stepSize: 1,
+                                max: 5,
+                                min: 0,
+                                showLabelBackdrop: false
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.parsed.r !== null) {
+                                        label += context.parsed.r;
+                                    }
+                                    return label;
+                                }
+                            }
+                        }
+                    }
+                };
+
+                chartInstances[canvasId] = new Chart(ctx, {
+                    type: 'radar',
+                    data: chartData,
+                    options: options
+                });
+            }
+
+            function renderGrid(filter = '') {
+                grid.innerHTML = '';
+                const lowerFilter = filter.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+                let resultsFound = false;
+
+                const filteredData = departmentsData.filter(dept => {
+                    const searchableText = [
+                        dept.acronym,
+                        dept.name,
+                        dept.profile,
+                        dept.what,
+                        dept.dayToDay.join(' '),
+                        dept.keywords
+                    ].join(' ').toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+                    
+                    return searchableText.includes(lowerFilter);
+                });
+
+                if (filteredData.length > 0) {
+                    resultsFound = true;
+                    noResults.classList.add('hidden');
+                } else {
+                    noResults.classList.remove('hidden');
+                }
+
+                filteredData.forEach(dept => {
+                    const card = document.createElement('div');
+                    card.className = 'department-card bg-white p-6 rounded-lg shadow-lg flex flex-col h-full border border-gray-200';
+                    card.dataset.keywords = dept.keywords;
+
+                    const dayToDayList = dept.dayToDay.map(item => 
+                        `<li class="flex items-start">
+                            <span class="flex-shrink-0 w-5 h-5 text-blue-700 mt-1 mr-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                            </span>
+                            <span class="text-gray-700">${item}</span>
+                         </li>`
+                    ).join('');
+                    
+                    const keywordsList = dept.keywords.split(', ').map(k => 
+                        `<span class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-1 rounded-full whitespace-nowrap">${k}</span>`
+                    ).join('');
+
+                    card.innerHTML = `
+                        <div class="flex-grow">
+                            <div class="flex justify-between items-start mb-3">
+                                <h3 class="text-2xl font-bold text-blue-900">${dept.acronym}</h3>
+                                <span class="inline-block bg-green-100 text-green-800 text-sm font-semibold px-3 py-1 rounded-full whitespace-nowrap">${dept.profile}</span>
+                            </div>
+                            <p class="text-sm text-gray-600 mb-4 h-12">${dept.name}</p>
+
+                            <h4 class="text-md font-semibold text-gray-800 mt-4 mb-2">Perfil Visual</h4>
+                            <p class="text-sm text-gray-600 mb-3">Uma representação visual das principais vocações do departamento.</p>
+                            <div class="chart-container w-full h-64 max-w-sm mx-auto mb-4">
+                                <canvas id="chart-${dept.id}"></canvas>
+                            </div>
+
+                            <h4 class="text-md font-semibold text-gray-800 mt-5 mb-2">O que faz?</h4>
+                            <p class="text-gray-700 text-sm mb-4">${dept.what}</p>
+
+                            <h4 class="text-md font-semibold text-gray-800 mt-5 mb-3">Dia a Dia e Operações</h4>
+                            <ul class="space-y-2 mb-4">
+                                ${dayToDayList}
+                            </ul>
+                        </div>
+
+                        <div class="mt-auto pt-4 border-t border-gray-100">
+                            <h4 class="text-md font-semibold text-gray-800 mb-3">Ferramentas e Conceitos-Chave</h4>
+                            <div class="flex flex-wrap gap-2">
+                                ${keywordsList}
+                            </div>
+                        </div>
+                    `;
+                    
+                    grid.appendChild(card);
+                    
+                    setTimeout(() => {
+                        createRadarChart('chart-' + dept.id, dept.chartData);
+                    }, 0);
+                });
+            }
+
+            searchBar.addEventListener('keyup', () => {
+                renderGrid(searchBar.value);
+            });
+
+            renderGrid();
+        });
+    </script>
+</body>
+</html>
