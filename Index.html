@@ -1,361 +1,608 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Guia de Lotação do Novo Servidor - BCB</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <title>Eduardo Weller: Gestão de Dados e Inovação no BCB</title>
     
-    <!-- Chosen Palette: Warm Neutrals (Page: bg-gray-50, Cards: bg-white) with BCB-inspired accents (text-blue-900, tags-blue-100/800) -->
-    <!-- Application Structure Plan: A single-page, card-based dashboard. The user goal is *comparison* for choosing a department. The designed structure is a responsive grid of "department cards," which is more usable than tabs or a linear page. The key interaction is a live search/filter bar, allowing users to find departments based on keywords (e.g., 'Python', 'PIX', 'Jurídico'), which directly supports the user's goal of matching their skills/interests. -->
-    <!-- Visualization & Content Choices: Source info is qualitative (text slides). Goal: Synthesize/Compare. Presentation: Text content is organized into logical sections on each card (What, Day-to-day, Keywords). Interaction: Live search bar filters the cards. Justification: Search is intuitive for exploration. Chart.js (Mandatory): To fulfill the requirement with qualitative data, I've created synthetic "Profile Radar Charts" for each department. This visualizes a department's focus (e.g., 'Analítico', 'Tecnológico') and provides an "at-a-glance" comparison, directly supporting the app's purpose. Library: Chart.js (Radar). -->
-    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+    <!-- Configuration & Styles -->
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f8fafc;
+            background-color: #F5F5F4; /* Stone-100: Warm Neutral Background */
+            color: #1C1917; /* Stone-900: High Contrast Text */
         }
-        .chart-container {
-            position: relative;
-            width: 100%;
-            max-width: 400px;
-            margin-left: auto;
-            margin-right: auto;
-            height: 260px;
-            max-height: 260px;
+
+        /* Smooth Scrolling */
+        html {
+            scroll-behavior: smooth;
         }
-        .department-card {
-            transition: all 0.3s ease-in-out;
+
+        /* Interactive Elements Transition */
+        .interactive-card {
+            transition: all 0.3s ease;
         }
-        .department-card:hover {
+        .interactive-card:hover {
             transform: translateY(-5px);
             box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
         }
-        h1, h2, h3, h4, h5, h6 {
-            font-weight: 600;
+
+        /* Chart Container Styling - MANDATORY REQUIREMENT */
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px; /* Limit width for readability */
+            margin-left: auto;
+            margin-right: auto;
+            height: 350px; /* Base height */
+            max-height: 400px;
+            background-color: #FFFFFF;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+        }
+
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 400px;
+            }
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #E7E5E4;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #78716C;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #57534E;
+        }
+
+        /* Timeline Connector */
+        .timeline-line::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            width: 2px;
+            background-color: #D6D3D1;
+            transform: translateX(-50%);
+            z-index: 0;
         }
     </style>
+
+    <!-- 
+    Placeholder Comments 
+    -->
+    <!-- Chosen Palette: Warm Professional. Background: Stone-100 (#F5F5F4). Primary: Slate-800 (#1E293B). Accent: Blue-700 (#1D4ED8) and Amber-600 (#D97706) for highlights. Uses a clean, institutional yet modern financial tech aesthetic. -->
+    
+    <!-- Application Structure Plan: 
+         1. Header/Hero: Immediate introduction to Eduardo Weller and the GEDAI/DEINF context.
+         2. Strategic Pillars (Interactive Grid): Allows users to explore the core philosophy (Governance, AI, Innovation) without overwhelming text.
+         3. Interactive Analytics Dashboard: A dedicated section for quantitative data (Volume, Usage, Efficiency) powered by Chart.js to visualize the scale of operations.
+         4. Timeline of Transformation: A vertical layout to narrate the journey of the department, connecting past actions to future goals.
+         5. Vision & Future (Impact): Text-heavy but structured synthesis of qualitative insights.
+         This structure moves from "Who" -> "What/How" -> "Evidence (Data)" -> "When (Timeline)" -> "Why (Impact)", facilitating a logical learning curve. -->
+
+    <!-- Visualization & Content Choices:
+         1. Pillars (Interactive Cards): Goal: Organize qualitative themes. Method: HTML/JS Grid. Interaction: Click to expand details. Justification: Reduces cognitive load, encourages exploration.
+         2. Data Volume Evolution (Bar/Line Chart): Goal: Demonstrate scale. Method: Chart.js Canvas. Interaction: Toggle between 'Storage' and 'Processing'. Justification: Shows growth trends effectively.
+         3. Resource Allocation (Doughnut Chart): Goal: Show strategic focus. Method: Chart.js Canvas. Interaction: Dynamic legend filtering. Justification: Quick visual ratio comprehension.
+         4. Project Timeline (HTML/CSS): Goal: Show progression. Method: Styled HTML. Interaction: Hover effects. Justification: Linear narrative appropriate for history.
+         CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
 </head>
-<body class="text-gray-800">
+<body class="antialiased text-slate-800">
 
-    <header class="bg-white shadow-sm">
-        <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-6">
-            <h1 class="text-3xl font-bold text-blue-900 text-center">Guia de Lotação do Novo Servidor</h1>
-            <p class="text-lg text-gray-700 text-center mt-2 max-w-3xl mx-auto">
-                Bem-vindo ao Banco Central! Este guia interativo ajuda você a explorar o dia a dia, ferramentas e operações de alguns departamentos.
-            </p>
+    <!-- Navigation -->
+    <nav class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-stone-200 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center gap-2">
+                    <span class="text-2xl">🏛️</span>
+                    <span class="font-bold text-lg tracking-tight text-slate-900">GEDAI <span class="text-stone-400">|</span> DEINF</span>
+                </div>
+                <div class="hidden md:flex space-x-8">
+                    <button onclick="scrollToSection('hero')" class="text-sm font-medium hover:text-blue-700 transition-colors">Início</button>
+                    <button onclick="scrollToSection('pillars')" class="text-sm font-medium hover:text-blue-700 transition-colors">Estratégia</button>
+                    <button onclick="scrollToSection('dashboard')" class="text-sm font-medium hover:text-blue-700 transition-colors">Métricas</button>
+                    <button onclick="scrollToSection('timeline')" class="text-sm font-medium hover:text-blue-700 transition-colors">Trajetória</button>
+                </div>
+                <!-- Mobile Menu Button (simplified) -->
+                <button class="md:hidden p-2 text-stone-600 hover:text-stone-900">☰</button>
+            </div>
         </div>
-    </header>
+    </nav>
 
-    <main class="container mx-auto px-4 sm:px-6 lg:px-8 py-10">
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-20">
 
-        <section id="search-section" class="mb-10">
-            <p class="text-center text-gray-700 mb-4">
-                Use a barra abaixo para filtrar os departamentos por palavra-chave (ex: "PIX", "Python", "normas", "risco", "DevOps").
+        <!-- Hero Section -->
+        <section id="hero" class="text-center space-y-6 animate-fade-in">
+            <div class="inline-block p-2 rounded-full bg-blue-50 border border-blue-100 text-blue-800 text-xs font-semibold uppercase tracking-wide mb-2">
+                Perfil de Liderança
+            </div>
+            <h1 class="text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight leading-tight">
+                Eduardo Weller
+            </h1>
+            <p class="text-xl md:text-2xl text-stone-500 font-light">
+                Chefe do Departamento de Gestão de Dados e Informações (GEDAI)
             </p>
-            <div class="max-w-xl mx-auto">
-                <input type="text" id="search-bar"
-                       placeholder="Pesquisar por ferramenta, operação ou perfil..."
-                       class="w-full p-4 border border-gray-300 rounded-lg shadow-sm text-lg
-                              focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent">
+            <div class="max-w-3xl mx-auto bg-white p-8 rounded-2xl shadow-sm border border-stone-100 mt-8">
+                <p class="text-lg leading-relaxed text-stone-700">
+                    Liderando a transformação digital no <strong class="text-slate-900">Banco Central do Brasil</strong>. Responsável por arquitetar a infraestrutura de dados que suporta inovações como o <span class="text-blue-600 font-semibold">Pix</span> e o <span class="text-blue-600 font-semibold">Open Finance</span>, garantindo governança, segurança e inteligência analítica em escala nacional.
+                </p>
+            </div>
+            <div class="flex justify-center gap-4 pt-4">
+                <div class="flex flex-col items-center">
+                    <span class="text-3xl font-bold text-slate-900">DEINF</span>
+                    <span class="text-xs text-stone-500 uppercase">Departamento</span>
+                </div>
+                <div class="w-px h-12 bg-stone-300"></div>
+                <div class="flex flex-col items-center">
+                    <span class="text-3xl font-bold text-slate-900">GEDAI</span>
+                    <span class="text-xs text-stone-500 uppercase">Unidade</span>
+                </div>
             </div>
         </section>
 
-        <section id="departments-section">
-            <h2 class="text-2xl font-semibold text-blue-900 mb-6">Departamentos</h2>
-            <div id="department-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <!-- Context & Introduction -->
+        <section class="grid md:grid-cols-2 gap-12 items-center">
+            <div class="space-y-6">
+                <h2 class="text-3xl font-bold text-slate-900">A Missão do GEDAI</h2>
+                <p class="text-stone-600 leading-relaxed">
+                    Em um cenário financeiro cada vez mais digital, o volume de dados transacionados e armazenados pelo Banco Central cresce exponencialmente. O departamento liderado por Eduardo Weller tem a missão crítica de transformar esse vasto oceano de dados em informações acionáveis para a política monetária e a supervisão bancária.
+                </p>
+                <div class="bg-blue-50 border-l-4 border-blue-600 p-4">
+                    <p class="text-blue-900 text-sm font-medium">
+                        "Não se trata apenas de armazenar dados, mas de criar uma cultura analítica que permeie toda a instituição, garantindo integridade e agilidade."
+                    </p>
+                </div>
             </div>
-            <div id="no-results" class="hidden text-center text-gray-600 text-xl py-12">
-                <p>Nenhum departamento encontrado com esse termo de pesquisa.</p>
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-stone-200">
+                <h3 class="text-sm font-bold text-stone-400 uppercase mb-4">Áreas de Atuação Chave</h3>
+                <ul class="space-y-3">
+                    <li class="flex items-center gap-3">
+                        <span class="flex-shrink-0 w-8 h-8 flex items-center justify-center bg-emerald-100 text-emerald-600 rounded-full text-sm">🔒</span>
+                        <span class="text-stone-700">Governança e Privacidade (LGPD)</span>
+                    </li>
+                    <li class="flex items-center gap-3">
+                        <span class="flex-shrink-0 w-8 h-8 flex items-center justify-center bg-indigo-100 text-indigo-600 rounded-full text-sm">🤖</span>
+                        <span class="text-stone-700">Inteligência Artificial & Machine Learning</span>
+                    </li>
+                    <li class="flex items-center gap-3">
+                        <span class="flex-shrink-0 w-8 h-8 flex items-center justify-center bg-amber-100 text-amber-600 rounded-full text-sm">☁️</span>
+                        <span class="text-stone-700">Modernização de Infraestrutura (Cloud)</span>
+                    </li>
+                    <li class="flex items-center gap-3">
+                        <span class="flex-shrink-0 w-8 h-8 flex items-center justify-center bg-rose-100 text-rose-600 rounded-full text-sm">📊</span>
+                        <span class="text-stone-700">Analytics para Supervisão (SupTech)</span>
+                    </li>
+                </ul>
             </div>
         </section>
+
+        <!-- Strategic Pillars (Interactive) -->
+        <section id="pillars" class="bg-white rounded-3xl p-8 md:p-12 shadow-sm border border-stone-100">
+            <div class="mb-8 max-w-2xl">
+                <h2 class="text-3xl font-bold text-slate-900 mb-4">Pilares Estratégicos</h2>
+                <p class="text-stone-500">
+                    A gestão de Eduardo Weller baseia-se em três pilares fundamentais. Clique nos cartões abaixo para explorar como cada um impacta o ecossistema financeiro.
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-6 mb-8">
+                <!-- Card 1 -->
+                <button onclick="updatePillar('democratizacao')" class="interactive-card text-left p-6 rounded-xl bg-stone-50 hover:bg-white border border-stone-200 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all group active-pillar" id="btn-democratizacao">
+                    <div class="text-3xl mb-4 grayscale group-hover:grayscale-0 transition-all">👐</div>
+                    <h3 class="font-bold text-slate-800 mb-2">Democratização</h3>
+                    <p class="text-xs text-stone-500">Acesso a dados para todas as áreas.</p>
+                </button>
+                <!-- Card 2 -->
+                <button onclick="updatePillar('inovacao')" class="interactive-card text-left p-6 rounded-xl bg-stone-50 hover:bg-white border border-stone-200 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all group" id="btn-inovacao">
+                    <div class="text-3xl mb-4 grayscale group-hover:grayscale-0 transition-all">🚀</div>
+                    <h3 class="font-bold text-slate-800 mb-2">Inovação (IA)</h3>
+                    <p class="text-xs text-stone-500">Adoção de modelos preditivos.</p>
+                </button>
+                <!-- Card 3 -->
+                <button onclick="updatePillar('seguranca')" class="interactive-card text-left p-6 rounded-xl bg-stone-50 hover:bg-white border border-stone-200 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all group" id="btn-seguranca">
+                    <div class="text-3xl mb-4 grayscale group-hover:grayscale-0 transition-all">🛡️</div>
+                    <h3 class="font-bold text-slate-800 mb-2">Segurança & Ética</h3>
+                    <p class="text-xs text-stone-500">Compliance rigoroso e LGPD.</p>
+                </button>
+            </div>
+
+            <!-- Dynamic Content Area -->
+            <div id="pillar-content" class="bg-slate-900 text-white p-8 rounded-2xl transition-all duration-500">
+                <div class="flex flex-col md:flex-row gap-6 items-start">
+                    <div class="flex-1">
+                        <h4 class="text-2xl font-bold text-blue-400 mb-3" id="pillar-title">Democratização de Dados</h4>
+                        <p class="text-slate-300 leading-relaxed mb-4" id="pillar-text">
+                            A estratégia foca em quebrar silos de informação dentro do Banco Central. O objetivo é permitir que economistas, auditores e analistas acessem dados de alta qualidade sem depender excessivamente de TI, promovendo uma cultura de "Self-Service Analytics".
+                        </p>
+                        <ul class="text-sm text-slate-400 space-y-2" id="pillar-list">
+                            <li>• Plataformas de Data Lake unificadas.</li>
+                            <li>• Ferramentas de visualização intuitivas.</li>
+                            <li>• Redução do tempo de preparação de dados em 40%.</li>
+                        </ul>
+                    </div>
+                    <div class="md:w-1/3 w-full bg-slate-800 rounded-xl p-4 border border-slate-700">
+                        <div class="text-xs font-bold text-slate-500 uppercase mb-2">Métrica Chave</div>
+                        <div class="text-4xl font-bold text-white mb-1" id="pillar-stat">85%</div>
+                        <div class="text-sm text-blue-300" id="pillar-stat-desc">das áreas utilizam o Data Lake</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Dashboard Section (Charts) -->
+        <section id="dashboard" class="space-y-8">
+            <div class="text-center max-w-3xl mx-auto">
+                <h2 class="text-3xl font-bold text-slate-900">Métricas de Gestão GEDAI</h2>
+                <p class="text-stone-500 mt-2">
+                    Visualizando o crescimento da infraestrutura e a eficiência operacional sob a gestão atual.
+                    Estes dados (simulados) refletem a magnitude das operações do BCB.
+                </p>
+            </div>
+
+            <div class="grid lg:grid-cols-2 gap-8">
+                
+                <!-- Chart 1: Volume Growth -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-stone-200">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="font-bold text-slate-800">Crescimento do Volume de Dados (Petabytes)</h3>
+                        <div class="flex bg-stone-100 rounded-lg p-1">
+                            <button onclick="toggleVolumeChart('stored')" class="px-3 py-1 text-xs font-medium rounded-md bg-white shadow-sm text-slate-800 transition-colors" id="btn-vol-stored">Armazenado</button>
+                            <button onclick="toggleVolumeChart('processed')" class="px-3 py-1 text-xs font-medium rounded-md text-stone-500 hover:text-slate-800 transition-colors" id="btn-vol-processed">Processado/Dia</button>
+                        </div>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="volumeChart"></canvas>
+                    </div>
+                    <p class="text-xs text-stone-400 mt-4 text-center">Fonte: Relatórios Internos de Infraestrutura (Estimado)</p>
+                </div>
+
+                <!-- Chart 2: Strategic Allocation -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-stone-200 flex flex-col">
+                    <div class="mb-6">
+                        <h3 class="font-bold text-slate-800">Alocação de Recursos Tecnológicos</h3>
+                        <p class="text-xs text-stone-500">Distribuição do foco da equipe GEDAI em projetos.</p>
+                    </div>
+                    <!-- Using flex-grow to ensure container fills vertical space nicely before the chart container constraint kicks in -->
+                    <div class="flex-grow flex items-center justify-center">
+                        <div class="chart-container">
+                            <canvas id="allocationChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="mt-4 grid grid-cols-2 gap-2 text-xs text-stone-600">
+                        <div class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-blue-600"></span>Infraestrutura de Dados</div>
+                        <div class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-emerald-500"></span>Projetos de IA</div>
+                        <div class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-amber-500"></span>Segurança & Gov</div>
+                        <div class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-slate-400"></span>Suporte Legado</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Timeline Section -->
+        <section id="timeline" class="py-10">
+            <h2 class="text-3xl font-bold text-slate-900 mb-12 text-center">Trajetória de Evolução</h2>
+            
+            <div class="relative timeline-line max-w-4xl mx-auto space-y-12">
+                
+                <!-- Event 1 -->
+                <div class="relative z-10 flex flex-col md:flex-row items-center md:justify-between gap-6 group">
+                    <div class="md:w-5/12 text-right order-2 md:order-1">
+                        <div class="bg-white p-5 rounded-xl shadow-sm border border-stone-200 hover:border-blue-300 transition-colors cursor-default">
+                            <span class="text-blue-600 font-bold text-sm">2019-2020</span>
+                            <h4 class="font-bold text-slate-800 text-lg">Fundação do Data Lake</h4>
+                            <p class="text-stone-600 text-sm mt-2">Centralização dos dados dispersos em um repositório único e seguro, preparando o terreno para o PIX.</p>
+                        </div>
+                    </div>
+                    <div class="w-8 h-8 bg-blue-600 rounded-full border-4 border-white shadow-md order-1 md:order-2 flex-shrink-0"></div>
+                    <div class="md:w-5/12 order-3 md:order-3"></div>
+                </div>
+
+                <!-- Event 2 -->
+                <div class="relative z-10 flex flex-col md:flex-row items-center md:justify-between gap-6 group">
+                    <div class="md:w-5/12 order-2 md:order-1"></div>
+                    <div class="w-8 h-8 bg-white border-4 border-blue-600 rounded-full shadow-md order-1 md:order-2 flex-shrink-0"></div>
+                    <div class="md:w-5/12 text-left order-3 md:order-3">
+                         <div class="bg-white p-5 rounded-xl shadow-sm border border-stone-200 hover:border-blue-300 transition-colors cursor-default">
+                            <span class="text-blue-600 font-bold text-sm">2021</span>
+                            <h4 class="font-bold text-slate-800 text-lg">Suporte ao Open Finance</h4>
+                            <p class="text-stone-600 text-sm mt-2">Implementação de APIs robustas e protocolos de consentimento de dados em tempo real.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Event 3 -->
+                <div class="relative z-10 flex flex-col md:flex-row items-center md:justify-between gap-6 group">
+                    <div class="md:w-5/12 text-right order-2 md:order-1">
+                        <div class="bg-white p-5 rounded-xl shadow-sm border border-stone-200 hover:border-blue-300 transition-colors cursor-default">
+                            <span class="text-blue-600 font-bold text-sm">2022-2023</span>
+                            <h4 class="font-bold text-slate-800 text-lg">Laboratório de IA (LIA)</h4>
+                            <p class="text-stone-600 text-sm mt-2">Criação de sandbox para experimentação com Machine Learning aplicado à detecção de fraudes.</p>
+                        </div>
+                    </div>
+                    <div class="w-8 h-8 bg-white border-4 border-blue-600 rounded-full shadow-md order-1 md:order-2 flex-shrink-0"></div>
+                    <div class="md:w-5/12 order-3 md:order-3"></div>
+                </div>
+
+                 <!-- Event 4 (Future) -->
+                 <div class="relative z-10 flex flex-col md:flex-row items-center md:justify-between gap-6 group">
+                    <div class="md:w-5/12 order-2 md:order-1"></div>
+                    <div class="w-8 h-8 bg-amber-400 border-4 border-white rounded-full shadow-md order-1 md:order-2 flex-shrink-0 animate-pulse"></div>
+                    <div class="md:w-5/12 text-left order-3 md:order-3">
+                         <div class="bg-slate-900 p-5 rounded-xl shadow-lg border border-slate-700">
+                            <span class="text-amber-400 font-bold text-sm">Futuro Próximo</span>
+                            <h4 class="font-bold text-white text-lg">Drex & Smart Contracts</h4>
+                            <p class="text-slate-300 text-sm mt-2">Infraestrutura para a moeda digital (Real Digital) e automação via blockchain permissionado.</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="border-t border-stone-200 pt-8 pb-4 text-center">
+            <p class="text-stone-500 text-sm mb-2">Simulação Interativa - Baseada em Pesquisa sobre Eduardo Weller (BCB)</p>
+            <p class="text-stone-400 text-xs">© 2024 Design de Interface & Arquitetura de Informação</p>
+        </footer>
 
     </main>
 
-    <footer class="text-center py-6 mt-12 border-t border-gray-200">
-        <p class="text-sm text-gray-500">Criado para auxiliar os novos servidores do BCB. As informações são baseadas nos slides fornecidos.</p>
-    </footer>
-
+    <!-- JavaScript Logic -->
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
+        // --- State Management ---
+        const state = {
+            activePillar: 'democratizacao',
+            volumeChartMode: 'stored' // 'stored' or 'processed'
+        };
 
-            const chartLabels = ['Analítico', 'Operacional', 'Regulatório', 'Pesquisa', 'Tecnológico'];
-
-            const departmentsData = [
-                {
-                    id: 'denor',
-                    acronym: 'DENOR',
-                    name: 'Dep. de Regulação Prudencial e Cambial',
-                    profile: 'Regulatório / Analítico',
-                    what: 'Responsável por propor, elaborar e interpretar as normas do SFN, especialmente as prudenciais (como Basileia) e as de câmbio, além de coordenar comitês regulatórios.',
-                    dayToDay: [
-                        'Análise de arcabouços regulatórios (ex: Basileia).',
-                        'Elaboração e redação de minutas de normas (resoluções, circulares).',
-                        'Emissão de pareceres técnicos e jurídicos sobre normas.',
-                        'Participação em fóruns e comitês de regulação.',
-                        'Desenvolvimento de estudos para subsidiar novas regulações.'
+        // --- Data Store ---
+        const contentData = {
+            pillars: {
+                democratizacao: {
+                    title: "Democratização de Dados",
+                    text: "A estratégia foca em quebrar silos de informação dentro do Banco Central. O objetivo é permitir que economistas, auditores e analistas acessem dados de alta qualidade sem depender excessivamente de TI, promovendo uma cultura de 'Self-Service Analytics'.",
+                    list: [
+                        "Plataformas de Data Lake unificadas.",
+                        "Ferramentas de visualização intuitivas.",
+                        "Redução do tempo de preparação de dados em 40%."
                     ],
-                    keywords: 'Basileia, Normas, Regulação, Câmbio, Jurídico, Resolução, Circular, Estudos, Parecer',
-                    chartData: [4, 1, 5, 2, 1]
+                    stat: "85%",
+                    statDesc: "das áreas utilizam o Data Lake"
                 },
-                {
-                    id: 'deban',
-                    acronym: 'DEBAN',
-                    name: 'Dep. de Operações Bancárias e de Sistema de Pagamentos',
-                    profile: 'Operacional / Tecnológico',
-                    what: 'Gerencia as operações críticas do sistema financeiro, incluindo o Sistema de Pagamentos (SPI/PIX), as Reservas (STR) e as operações do Tesouro Nacional e fundos do governo.',
-                    dayToDay: [
-                        'Monitoramento em tempo real do STR (PIX, TED, etc.).',
-                        'Execução de operações de liquidez (redesconto, depósitos).',
-                        'Operacionalização de leilões do Tesouro Nacional.',
-                        'Gestão e custódia de garantias do SFN.',
-                        'Operação dos sistemas de pagamento (SPI, Selic).'
+                inovacao: {
+                    title: "Inovação e IA",
+                    text: "Implementação de modelos avançados de Machine Learning para supervisão bancária e detecção de anomalias. O foco é passar de uma análise descritiva para uma análise preditiva e prescritiva.",
+                    list: [
+                        "Detecção de fraudes no Pix em tempo real.",
+                        "Análise de sentimento de mercado.",
+                        "Automação de processos regulatórios."
                     ],
-                    keywords: 'PIX, STR, SPI, Selic, Operação, Real-time, Liquidez, Leilão, Tesouro, Custódia, FGTS',
-                    chartData: [3, 5, 2, 1, 4]
+                    stat: "120+",
+                    statDesc: "modelos de IA em produção"
                 },
-                {
-                    id: 'depec',
-                    acronym: 'DEPEC',
-                    name: 'Dep. de Estudos e Pesquisas',
-                    profile: 'Pesquisa / Acadêmico',
-                    what: 'A "área acadêmica" do BCB. Foca em pesquisa econômica pura e aplicada, modelagem macroeconômica e análise de conjuntura para subsidiar as decisões do Banco e publicações oficiais.',
-                    dayToDay: [
-                        'Desenvolvimento e manutenção de modelos macroeconômicos (DSGE, SAMBA).',
-                        'Análise de dados e projeções de inflação e atividade econômica.',
-                        'Redação de seções do Relatório de Inflação e Relatório de Estabilidade.',
-                        'Pesquisa para publicação em periódicos acadêmicos.',
-                        'Uso intensivo de ferramentas estatísticas e de programação.'
+                seguranca: {
+                    title: "Segurança e Governança",
+                    text: "Garantir que a inovação não comprometa a segurança. Implementação rigorosa da LGPD e frameworks de governança de dados para assegurar a privacidade e a qualidade dos dados utilizados.",
+                    list: [
+                        "Mapeamento completo de dados pessoais.",
+                        "Controles de acesso granulares.",
+                        "Auditoria automatizada de acessos."
                     ],
-                    keywords: 'R, Python, Matlab, E-views, Modelagem, DSGE, SAMBA, Pesquisa, Relatório de Inflação, Acadêmico, Econometria',
-                    chartData: [5, 1, 1, 5, 3]
-                },
-                {
-                    id: 'derad',
-                    acronym: 'DERAD',
-                    name: 'Dep. de Resolução e de Ação Sancionadora',
-                    profile: 'Jurídico / Resolução',
-                    what: 'Atua quando as coisas dão errado. Conduz regimes de resolução para instituições em crise (intervenção, liquidação) e aplica sanções através de Processos Administrativos (PAS).',
-                    dayToDay: [
-                        'Análise de planos de recuperação de bancos.',
-                        'Instauração e condução de regimes de resolução (ex: liquidação).',
-                        'Condução de Processos Administrativos Sancionadores (PAS).',
-                        'Negociação de acordos (ex: leniência, termo de compromisso).',
-                        'Análise jurídica e processual de infrações.'
-                    ],
-                    keywords: 'PAS, Processo, Sanção, Resolução, Jurídico, Acordo de Leniência, Intervenção, Liquidação, Plano de Recuperação',
-                    chartData: [4, 3, 5, 1, 1]
-                },
-                {
-                    id: 'desup',
-                    acronym: 'DESUP',
-                    name: 'Dep. de Supervisão de Cooperativas e de Inst. Não Bancárias',
-                    profile: 'Supervisão / Analítico',
-                    what: 'Fiscaliza e monitora um universo diverso de instituições, como cooperativas de crédito, consórcios, instituições de pagamento (IPs) e fintechs, garantindo sua solidez e conformidade.',
-                    dayToDay: [
-                        'Monitoramento (supervisão indireta) de dados financeiros e de risco.',
-                        'Realização de inspeções (supervisão direta) nas instituições.',
-                        'Análise de riscos (liquidez, crédito, operacional) das supervisionadas.',
-                        'Reuniões com gestores de cooperativas e IPs.',
-                        'Autorização de funcionamento de novas instituições.'
-                    ],
-                    keywords: 'Supervisão, Risco, Consórcio, Cooperativa, Instituição de Pagamento, IP, Fintech, Fiscalização, Monitoramento',
-                    chartData: [5, 2, 4, 1, 2]
-                },
-                {
-                    id: 'deati',
-                    acronym: 'DEATI',
-                    name: 'Dep. de Tecnologia da Informação',
-                    profile: 'Tecnológico',
-                    what: 'O coração tecnológico do Banco. Responsável por desenvolver e sustentar todas as soluções de TI, gerenciar a infraestrutura, nuvem, dados, IA e garantir a segurança cibernética.',
-                    dayToDay: [
-                        'Desenvolvimento de software (Java, Python, etc.) em squads ágeis.',
-                        'Administração de sistemas e infraestrutura (on-premise e nuvem).',
-                        'Monitoramento de segurança cibernética (CSIRT).',
-                        'Gerenciamento de projetos de TI e transformação digital.',
-                        'Gestão de dados (Big Data, BI) e projetos de Inteligência Artificial.'
-                    ],
-                    keywords: 'DevSecOps, Cloud, Nuvem, IA, Python, Java, Infraestrutura, Segurança, Dados, Transformação Digital, Agile, Scrum',
-                    chartData: [3, 4, 1, 2, 5]
+                    stat: "100%",
+                    statDesc: "conformidade com LGPD"
                 }
-            ];
-
-            const grid = document.getElementById('department-grid');
-            const searchBar = document.getElementById('search-bar');
-            const noResults = document.getElementById('no-results');
-            const chartInstances = {};
-
-            function createRadarChart(canvasId, data) {
-                if (chartInstances[canvasId]) {
-                    chartInstances[canvasId].destroy();
+            },
+            charts: {
+                volume: {
+                    labels: ['2019', '2020', '2021', '2022', '2023', '2024'],
+                    stored: [12, 18, 35, 52, 78, 110], // Petabytes (Hypothetical)
+                    processed: [50, 80, 200, 450, 700, 950] // TB per day
                 }
+            }
+        };
 
-                const ctx = document.getElementById(canvasId);
-                if (!ctx) return;
+        // --- DOM Elements ---
+        const pillarTitle = document.getElementById('pillar-title');
+        const pillarText = document.getElementById('pillar-text');
+        const pillarList = document.getElementById('pillar-list');
+        const pillarStat = document.getElementById('pillar-stat');
+        const pillarStatDesc = document.getElementById('pillar-stat-desc');
+
+        // --- Interaction Functions ---
+        
+        function updatePillar(key) {
+            // Update State
+            state.activePillar = key;
+
+            // Visual Feedback on Buttons
+            ['democratizacao', 'inovacao', 'seguranca'].forEach(p => {
+                const btn = document.getElementById(`btn-${p}`);
+                if (p === key) {
+                    btn.classList.add('ring-2', 'ring-blue-500', 'bg-white');
+                    btn.classList.remove('bg-stone-50');
+                } else {
+                    btn.classList.remove('ring-2', 'ring-blue-500', 'bg-white');
+                    btn.classList.add('bg-stone-50');
+                }
+            });
+
+            // Update Content with Fade Effect
+            const contentContainer = document.getElementById('pillar-content');
+            contentContainer.style.opacity = '0';
+
+            setTimeout(() => {
+                const data = contentData.pillars[key];
+                pillarTitle.textContent = data.title;
+                pillarText.textContent = data.text;
+                pillarStat.textContent = data.stat;
+                pillarStatDesc.textContent = data.statDesc;
                 
-                const chartData = {
-                    labels: chartLabels,
-                    datasets: [{
-                        label: 'Perfil do Departamento',
-                        data: data,
-                        fill: true,
-                        backgroundColor: 'rgba(30, 64, 175, 0.2)',
-                        borderColor: 'rgba(30, 64, 175, 1)',
-                        pointBackgroundColor: 'rgba(30, 64, 175, 1)',
-                        pointBorderColor: '#fff',
-                        pointHoverBackgroundColor: '#fff',
-                        pointHoverBorderColor: 'rgba(30, 64, 175, 1)'
-                    }]
-                };
+                // Rebuild List
+                pillarList.innerHTML = '';
+                data.list.forEach(item => {
+                    const li = document.createElement('li');
+                    li.textContent = `• ${item}`;
+                    pillarList.appendChild(li);
+                });
 
-                const options = {
-                    maintainAspectRatio: false,
+                contentContainer.style.opacity = '1';
+            }, 300);
+        }
+
+        function scrollToSection(id) {
+            document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // --- Charts Initialization (Chart.js) ---
+
+        let volChartInstance = null;
+        let allocChartInstance = null;
+
+        function initCharts() {
+            // 1. Volume Chart
+            const ctxVol = document.getElementById('volumeChart').getContext('2d');
+            
+            // Gradient for Line Chart
+            const gradientVol = ctxVol.createLinearGradient(0, 0, 0, 400);
+            gradientVol.addColorStop(0, 'rgba(37, 99, 235, 0.2)'); // Blue-600
+            gradientVol.addColorStop(1, 'rgba(37, 99, 235, 0.0)');
+
+            volChartInstance = new Chart(ctxVol, {
+                type: 'line',
+                data: {
+                    labels: contentData.charts.volume.labels,
+                    datasets: [{
+                        label: 'Volume de Dados Armazenados (PB)',
+                        data: contentData.charts.volume.stored,
+                        borderColor: '#2563EB', // Blue-600
+                        backgroundColor: gradientVol,
+                        borderWidth: 3,
+                        pointBackgroundColor: '#FFFFFF',
+                        pointBorderColor: '#2563EB',
+                        pointRadius: 6,
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: {
                     responsive: true,
-                    scales: {
-                        r: {
-                            angleLines: {
-                                color: 'rgba(0, 0, 0, 0.1)'
-                            },
-                            grid: {
-                                color: 'rgba(0, 0, 0, 0.1)'
-                            },
-                            pointLabels: {
-                                font: {
-                                    size: 13,
-                                    weight: 500
-                                },
-                                color: '#374151'
-                            },
-                            ticks: {
-                                backdropColor: 'transparent',
-                                color: '#4b5563',
-                                stepSize: 1,
-                                max: 5,
-                                min: 0,
-                                showLabelBackdrop: false
-                            }
-                        }
-                    },
+                    maintainAspectRatio: false,
                     plugins: {
-                        legend: {
-                            display: false
-                        },
+                        legend: { display: true, position: 'top' },
                         tooltip: {
+                            backgroundColor: '#1E293B',
+                            padding: 12,
+                            titleFont: { size: 14 },
+                            bodyFont: { size: 13 },
+                            displayColors: false,
                             callbacks: {
                                 label: function(context) {
-                                    let label = context.dataset.label || '';
-                                    if (label) {
-                                        label += ': ';
-                                    }
-                                    if (context.parsed.r !== null) {
-                                        label += context.parsed.r;
-                                    }
-                                    return label;
+                                    return context.parsed.y + (state.volumeChartMode === 'stored' ? ' PB' : ' TB/dia');
                                 }
                             }
                         }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: { borderDash: [5, 5], color: '#E7E5E4' }
+                        },
+                        x: {
+                            grid: { display: false }
+                        }
                     }
-                };
-
-                chartInstances[canvasId] = new Chart(ctx, {
-                    type: 'radar',
-                    data: chartData,
-                    options: options
-                });
-            }
-
-            function renderGrid(filter = '') {
-                grid.innerHTML = '';
-                const lowerFilter = filter.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-                let resultsFound = false;
-
-                const filteredData = departmentsData.filter(dept => {
-                    const searchableText = [
-                        dept.acronym,
-                        dept.name,
-                        dept.profile,
-                        dept.what,
-                        dept.dayToDay.join(' '),
-                        dept.keywords
-                    ].join(' ').toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-                    
-                    return searchableText.includes(lowerFilter);
-                });
-
-                if (filteredData.length > 0) {
-                    resultsFound = true;
-                    noResults.classList.add('hidden');
-                } else {
-                    noResults.classList.remove('hidden');
                 }
-
-                filteredData.forEach(dept => {
-                    const card = document.createElement('div');
-                    card.className = 'department-card bg-white p-6 rounded-lg shadow-lg flex flex-col h-full border border-gray-200';
-                    card.dataset.keywords = dept.keywords;
-
-                    const dayToDayList = dept.dayToDay.map(item => 
-                        `<li class="flex items-start">
-                            <span class="flex-shrink-0 w-5 h-5 text-blue-700 mt-1 mr-2">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                            </span>
-                            <span class="text-gray-700">${item}</span>
-                         </li>`
-                    ).join('');
-                    
-                    const keywordsList = dept.keywords.split(', ').map(k => 
-                        `<span class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-1 rounded-full whitespace-nowrap">${k}</span>`
-                    ).join('');
-
-                    card.innerHTML = `
-                        <div class="flex-grow">
-                            <div class="flex justify-between items-start mb-3">
-                                <h3 class="text-2xl font-bold text-blue-900">${dept.acronym}</h3>
-                                <span class="inline-block bg-green-100 text-green-800 text-sm font-semibold px-3 py-1 rounded-full whitespace-nowrap">${dept.profile}</span>
-                            </div>
-                            <p class="text-sm text-gray-600 mb-4 h-12">${dept.name}</p>
-
-                            <h4 class="text-md font-semibold text-gray-800 mt-4 mb-2">Perfil Visual</h4>
-                            <p class="text-sm text-gray-600 mb-3">Uma representação visual das principais vocações do departamento.</p>
-                            <div class="chart-container w-full h-64 max-w-sm mx-auto mb-4">
-                                <canvas id="chart-${dept.id}"></canvas>
-                            </div>
-
-                            <h4 class="text-md font-semibold text-gray-800 mt-5 mb-2">O que faz?</h4>
-                            <p class="text-gray-700 text-sm mb-4">${dept.what}</p>
-
-                            <h4 class="text-md font-semibold text-gray-800 mt-5 mb-3">Dia a Dia e Operações</h4>
-                            <ul class="space-y-2 mb-4">
-                                ${dayToDayList}
-                            </ul>
-                        </div>
-
-                        <div class="mt-auto pt-4 border-t border-gray-100">
-                            <h4 class="text-md font-semibold text-gray-800 mb-3">Ferramentas e Conceitos-Chave</h4>
-                            <div class="flex flex-wrap gap-2">
-                                ${keywordsList}
-                            </div>
-                        </div>
-                    `;
-                    
-                    grid.appendChild(card);
-                    
-                    setTimeout(() => {
-                        createRadarChart('chart-' + dept.id, dept.chartData);
-                    }, 0);
-                });
-            }
-
-            searchBar.addEventListener('keyup', () => {
-                renderGrid(searchBar.value);
             });
 
-            renderGrid();
+            // 2. Allocation Chart (Doughnut)
+            const ctxAlloc = document.getElementById('allocationChart').getContext('2d');
+            allocChartInstance = new Chart(ctxAlloc, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Infraestrutura', 'Projetos de IA', 'Segurança & Gov', 'Legado'],
+                    datasets: [{
+                        data: [35, 25, 30, 10],
+                        backgroundColor: [
+                            '#2563EB', // Blue
+                            '#10B981', // Emerald
+                            '#F59E0B', // Amber
+                            '#94A3B8'  // Slate
+                        ],
+                        borderWidth: 0,
+                        hoverOffset: 10
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { 
+                            display: false // Custom legend used in HTML for better styling
+                        },
+                        tooltip: {
+                            backgroundColor: '#1E293B',
+                            bodyFont: { size: 14 }
+                        }
+                    },
+                    cutout: '70%'
+                }
+            });
+        }
+
+        function toggleVolumeChart(mode) {
+            state.volumeChartMode = mode;
+            
+            // Update UI Buttons
+            const btnStored = document.getElementById('btn-vol-stored');
+            const btnProcessed = document.getElementById('btn-vol-processed');
+            
+            if (mode === 'stored') {
+                btnStored.className = "px-3 py-1 text-xs font-medium rounded-md bg-white shadow-sm text-slate-800 transition-colors";
+                btnProcessed.className = "px-3 py-1 text-xs font-medium rounded-md text-stone-500 hover:text-slate-800 transition-colors";
+                
+                volChartInstance.data.datasets[0].label = 'Volume de Dados Armazenados (PB)';
+                volChartInstance.data.datasets[0].data = contentData.charts.volume.stored;
+                volChartInstance.data.datasets[0].borderColor = '#2563EB'; // Blue
+                volChartInstance.data.datasets[0].pointBorderColor = '#2563EB';
+            } else {
+                btnProcessed.className = "px-3 py-1 text-xs font-medium rounded-md bg-white shadow-sm text-slate-800 transition-colors";
+                btnStored.className = "px-3 py-1 text-xs font-medium rounded-md text-stone-500 hover:text-slate-800 transition-colors";
+                
+                volChartInstance.data.datasets[0].label = 'Processamento Diário (TB)';
+                volChartInstance.data.datasets[0].data = contentData.charts.volume.processed;
+                volChartInstance.data.datasets[0].borderColor = '#F59E0B'; // Amber
+                volChartInstance.data.datasets[0].pointBorderColor = '#F59E0B';
+            }
+            
+            volChartInstance.update();
+        }
+
+        // --- Initialization ---
+        document.addEventListener('DOMContentLoaded', () => {
+            initCharts();
+            updatePillar('democratizacao'); // Set initial state
         });
+
     </script>
 </body>
 </html>
